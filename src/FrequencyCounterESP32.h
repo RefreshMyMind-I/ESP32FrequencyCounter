@@ -17,7 +17,9 @@ private:
   unsigned long lastPulseCount;
   unsigned long lastMillis;
 
-  static void IRAM_ATTR handlePulseStatic(void* instance);
+  static FrequencyCounterESP32* instance;  // Add this static member
+  static void IRAM_ATTR handlePulseStatic();  // Change this line
+
   void handlePulse();
 };
 

@@ -2,11 +2,14 @@
 
 #include "FrequencyCounterESP32.h"
 
+FrequencyCounterESP32* FrequencyCounterESP32::instance = nullptr;  // Add this line
+
 FrequencyCounterESP32::FrequencyCounterESP32(int inputPin) {
   this->inputPin = inputPin;
   this->pulseCount = 0;
   this->lastPulseCount = 0;
   this->lastMillis = 0;
+  instance = this;
 }
 
 void FrequencyCounterESP32::begin() {
@@ -27,8 +30,10 @@ unsigned long FrequencyCounterESP32::getFrequency() {
   return frequency;
 }
 
-void IRAM_ATTR FrequencyCounterESP32::handlePulseStatic(void* instance) {
-  static_cast<FrequencyCounterESP32*>(instance)->handlePulse();
+void IRAM_ATTR FrequencyCounterESP32::handlePulseStatic() {
+  if (instance) {
+    instance->handlePulse();
+  }
 }
 
 void FrequencyCounterESP32::handlePulse() {
